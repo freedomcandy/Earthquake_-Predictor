@@ -18,4 +18,4 @@ def funcFib(max_value):
         return_num, a, b = a, b, a+b
         yield return_num
     
-print list(funcFib(100))
+print (list(funcFib(100)))
