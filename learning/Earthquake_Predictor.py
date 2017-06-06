@@ -25,3 +25,20 @@ print(aBHN)
 
 # import tflearn
 print('sunny_test')
+
+
+import tflearn
+
+def threeLayerDNN(data,labels):
+    net = tflearn.input_data(shape=[None, None])
+    net = tflearn.fully_connected(net, 0)
+    net = tflearn.fully_connected(net, 0)
+    net = tflearn.fully_connected(net, 0, activation='softmax')
+    #categorical_crossentropy
+    net = tflearn.regression(net, optimizer='sgd', loss='mean_square')
+
+    # Define model
+    model = tflearn.DNN(net)
+    # Start training (apply gradient descent algorithm)
+    model.fit(data, labels, n_epoch=10, batch_size=16, show_metric=True)
+    return model.predict(data)
