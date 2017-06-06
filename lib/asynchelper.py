@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import asyncio, selectors, sys
 
-@asyncio.coroutines
+@asyncio.coroutine
 def async_read(file_name):
     this_future = asyncio.Future(loop=EventLoop)
-    read_code = '''with open({0}) as f:print(f.readlines())'''.format(file_name)
+    read_code = '''from obspy.core import read;print(read("{0}"))'''.format(file_name)
     fork_pro = EventLoop.subprocess_exec(lambda: DateProtocol(this_future),
                                          sys.executable, '-c', read_code)
     transport, protocol = yield from fork_pro
@@ -33,6 +33,7 @@ class CurrentEventLoop(object):
         if current_sys in ('win32', 'cygwin'):
             '''windows'''
             loop = asyncio.ProactorEventLoop()
+            asyncio.set_event_loop(loop)
         elif current_sys == 'darwin':
             '''mac os'''
             async_poll = selectors.SelectSelector()
@@ -42,7 +43,13 @@ class CurrentEventLoop(object):
             loop = asyncio.get_event_loop()
         asyncio.set_event_loop(loop)
         return loop
+
 try:
     EventLoop
 except NameError:
     EventLoop = CurrentEventLoop()
+    
+if __name__ == '__main__':
+    EventLoop.run_until_complete(async_read('../Datas/after/SC.XJI.2008133160000.D.00.BHZ.sac'))
+    EventLoop.run_forever()
+    
