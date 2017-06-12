@@ -1,4 +1,9 @@
+#eclipse config
 /.idea
 /.pydevproject
 /.project
 /.settings
+
+#python file
+__pycache__/
+*.py[cod]
