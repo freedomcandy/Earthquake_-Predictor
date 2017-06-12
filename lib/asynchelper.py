@@ -4,7 +4,7 @@ import asyncio, selectors, sys
 @asyncio.coroutine
 def async_read(file_name):
     this_future = asyncio.Future(loop=EventLoop)
-    read_code = '''from obspy.core import read;print(read("{0}"))'''.format(file_name)
+    read_code = '''from obspy.core import read;print(read("{0}", debug_headers=True))'''.format(file_name)
     fork_pro = EventLoop.subprocess_exec(lambda: DateProtocol(this_future),
                                          sys.executable, '-c', read_code)
     transport, protocol = yield from fork_pro
