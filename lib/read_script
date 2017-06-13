@@ -5,8 +5,8 @@ for attr_name in ('channel', 'starttime', 'endtime', 'sampling_rate', 'delta', '
              	  'calib', '_format'):
     attr_value = getattr(status, attr_name)
     if attr_name in ('starttime', 'endtime'):
-    	attr_value = str(attr_value.datetime)
+        attr_value = str(attr_value.datetime)
     return_list.append(attr_value)
 if hasattr(status, 'gse2'):
-	return_list += status.gse2.values()
+    return_list += status.gse2.values()
 print(return_list)
