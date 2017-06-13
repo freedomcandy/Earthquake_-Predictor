@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import asyncio, selectors, sys, os
 
-Process_query = []
-
 with open(os.path.dirname(__file__)+'/read_script', 'r') as script_file:
     Script = script_file.read()
     
