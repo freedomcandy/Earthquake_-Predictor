@@ -1,0 +1,12 @@
+from obspy.core import read
+status = read("{0}", debug_headers=True)[0].stats
+return_list = []
+for attr_name in ('channel', 'starttime', 'endtime', 'sampling_rate', 'delta', 'npts',
+             	  'calib', '_format'):
+    attr_value = getattr(status, attr_name)
+    if attr_name in ('starttime', 'endtime'):
+    	attr_value = str(attr_value.datetime)
+    return_list.append(attr_value)
+if hasattr(status, 'gse2'):
+	return_list += status.gse2.values()
+print(return_list)

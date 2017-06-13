@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
-import asyncio, selectors, sys
+import asyncio, selectors, sys, os
+
+with open(os.path.dirname(__file__)+'/read_script', 'r') as script_file:
+    Script = script_file.read()
 
 @asyncio.coroutine
 def async_read(file_name):
     this_future = asyncio.Future(loop=EventLoop)
-    read_code = '''from obspy.core import read;print(read("{0}", debug_headers=True))'''.format(file_name)
     fork_pro = EventLoop.subprocess_exec(lambda: DateProtocol(this_future),
-                                         sys.executable, '-c', read_code)
+                                         sys.executable, '-c', Script.format(file_name))
     transport, protocol = yield from fork_pro
     yield from this_future
     transport.close()
     data = bytes(protocol.output)
-    return data.decode('ascii').rstrip()
+    return eval(data.decode('ascii').lstrip('\n').rstrip())
 
 class DateProtocol(asyncio.SubprocessProtocol):
     '''子进程间的交互协议'''
@@ -33,7 +35,6 @@ class CurrentEventLoop(object):
         if current_sys in ('win32', 'cygwin'):
             '''windows'''
             loop = asyncio.ProactorEventLoop()
-            asyncio.set_event_loop(loop)
         elif current_sys == 'darwin':
             '''mac os'''
             async_poll = selectors.SelectSelector()
@@ -48,8 +49,4 @@ try:
     EventLoop
 except NameError:
     EventLoop = CurrentEventLoop()
-    
-if __name__ == '__main__':
-    EventLoop.run_until_complete(async_read('../Datas/after/SC.XJI.2008133160000.D.00.BHZ.sac'))
-    EventLoop.run_forever()
     
