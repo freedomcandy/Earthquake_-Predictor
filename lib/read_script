@@ -1,12 +1,22 @@
+# -*- coding: utf-8 -*-
+from datetime import datetime
 from obspy.core import read
-status = read("{0}", debug_headers=True)[0].stats
+from obspy.signal.trigger import classic_sta_lta
+
+'''获取文件内容'''
+file_data = read("{0}", debug_headers=True)[0]
+'''地震状态数据'''
+status = file_data.stats
+start_time = float(status.starttime.strftime("%s.%f")) 
+
+rate = file_data.stats.sampling_rate
+
+cft = classic_sta_lta(file_data.data, int(5 * rate), int(10 * rate))
+
+last_ctf, utc_offset = None, 8*3600
 return_list = []
-for attr_name in ('channel', 'starttime', 'endtime', 'sampling_rate', 'delta', 'npts',
-             	  'calib', '_format'):
-    attr_value = getattr(status, attr_name)
-    if attr_name in ('starttime', 'endtime'):
-        attr_value = str(attr_value.datetime)
-    return_list.append(attr_value)
-if hasattr(status, 'gse2'):
-    return_list += status.gse2.values()
+for index, ctt_item in enumerate(cft, start=1):
+    if (last_ctf is not None) and (last_ctf <= 0) and (ctt_item > 0):
+        return_list.append(float(datetime.fromtimestamp(start_time+ utc_offset + float(index)/1000).strftime('%Y%m%d%H%M%S.%f')))
+    last_ctf = ctt_item
 print(return_list)
