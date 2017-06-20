@@ -5,7 +5,7 @@ with open(os.path.dirname(__file__)+'/read_script', 'r') as script_file:
     Script = script_file.read()
     
 @asyncio.coroutine
-def async_read(file_name):
+def async_read(extra, file_name, method):
     this_future = asyncio.Future(loop=EventLoop)
     fork_pro = EventLoop.subprocess_exec(lambda: DateProtocol(this_future),
                                          sys.executable, '-c', Script.format(file_name))
@@ -13,7 +13,7 @@ def async_read(file_name):
     yield from this_future
     transport.close()
     data = bytes(protocol.output)
-    return eval(data.decode('ascii').lstrip('\n').rstrip())
+    return method(extra, eval(data.decode('ascii').lstrip('\n').rstrip()))
 
 class DateProtocol(asyncio.SubprocessProtocol):
     '''子进程间的交互协议'''

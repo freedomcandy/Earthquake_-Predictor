@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from obspy.core import read
 from obspy.signal.trigger import classic_sta_lta
 
-'''获取文件内容'''
 file_data = read("{0}", debug_headers=True)[0]
-'''地震状态数据'''
 status = file_data.stats
 start_time = float(status.starttime.strftime("%s.%f")) 
 
