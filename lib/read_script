@@ -13,7 +13,7 @@ cft = classic_sta_lta(file_data.data, int(5 * rate), int(10 * rate))
 last_ctf, utc_offset = None, 8*3600
 return_list = []
 for index, ctt_item in enumerate(cft, start=1):
-    if (last_ctf is not None) and (last_ctf <= 0) and (ctt_item > 0):
+    if (last_ctf is not None) and (last_ctf <= 0.05) and (ctt_item > 0.05):
         return_list.append(float(datetime.fromtimestamp(start_time+ utc_offset + float(index)/1000).strftime('%Y%m%d%H%M%S.%f')))
     last_ctf = ctt_item
 print(return_list)
