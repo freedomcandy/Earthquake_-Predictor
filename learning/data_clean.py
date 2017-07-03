@@ -4,7 +4,7 @@ from lib.asynchelper import async_read, EventLoop
 from lib.pathhelper import after_path, clean_after
 
 '''一次性处理文件的个数，mac电脑30个还不会影响其他功能的使用'''
-ONECE_COUNT = 10
+ONECE_COUNT = 25
 
 WAVE_TYPE = {'Z': 'P', 'E': 'S', 'N': 'S'}
 

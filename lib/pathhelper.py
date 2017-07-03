@@ -18,7 +18,7 @@ clean_path = os.path.join(father_path, 'CleanData')
 '''清洗开始'''
 clean_before = os.path.join(clean_path, 'clean_before')
 '''清洗结束'''
-clean_after = os.path.join(clean_path, 'detection.csv')
+clean_after = os.path.join(clean_path, 'detection_20170703.csv')
 
 '''观测站位置文件'''
 station_path = os.path.join(data_path, 'station_latlon.txt')
